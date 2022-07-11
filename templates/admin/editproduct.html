@@ -1,0 +1,99 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>
+        Argon Dashboard - Free Dashboard for Bootstrap 4 by Creative Tim
+    </title>
+    <!-- Favicon -->
+    <link href="{% static 'admin/img/brand/favicon.png' %}" rel="icon" type="image/png">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+    <!-- Icons -->
+    <link href="{% static 'admin/js/plugins/nucleo/css/nucleo.css' %}" rel="stylesheet" />
+    <link href="{% static 'admin/js/plugins/@fortawesome/fontawesome-free/css/all.min.css' %}" rel="stylesheet" />
+    <!-- CSS Files -->
+    <link href="{% static 'admin/css/argon-dashboard.css' %}" rel="stylesheet" />
+</head>
+
+<body class="bg-default ">
+    <div class="main-content">
+        <div class="container mt-4 pb-5">
+            <!-- Table -->
+            <div class="row justify-content-center">
+                <div class="col-lg-10 col-md-10">
+                    <div class="card bg-secondary shadow border-0">
+                        <div class="card-body px-lg-5 py-lg-5">
+                            
+                            <div class=" text-muted mb-4">
+                                <strong>Edit product details</strong>
+                            </div>
+                            
+                            <form role="form" action="" method="POST" id="filterationForm" data-filters-url="{% url 'ajax_load_subcategories' %}" novalidate>
+                                {% csrf_token %}
+                                {% for form in form %}
+                                <div class="form-group">
+                                    <div class="input-group input-group-alternative mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text text-dark">{{ form.label }}</span>
+                                        </div>
+                                        {{form}}
+                                    </div>
+                                </div>
+                                {% endfor %}
+                                <div class="text-center">
+                                    <button onclick="return confirm('Are you sure you want to save changes ?')" type="button" class="btn btn-primary mt-4">Save changes</button>
+                                </div>
+                                <div style="text-align: end;">
+                                    <a type="button" class="btn btn-danger" href="{% url 'productmanagement' %}">Return</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-4">
+        <!--   Core   -->
+        <script src="{% static 'admin/js/plugins/jquery/dist/jquery.min.js' %}"></script>
+        <script src="{% static 'admin/js/plugins/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+        <!--   Optional JS   -->
+        <script src="{% static 'admin/js/plugins/chart.js/dist/Chart.min.js' %}"></script>
+        <script src="{% static 'admin/js/plugins/chart.js/dist/Chart.extension.js' %}"></script>
+        <!--   Argon JS   -->
+        <script src="{% static 'admin/js/argon-dashboard.min.js' %}"></script>
+        <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script>
+            window.TrackJS &&
+                TrackJS.install({
+                    token: "ee6fab19c5a04ac1a32a645abde4613a",
+                    application: "argon-dashboard-free"
+                });
+        </script>
+        <script>
+            $("#id_category").change(function () {
+              var url = $("#filterationForm").attr("data-filters-url");  // get the url of the `load_cities` view
+              var categoryId = $(this).val();  // get the selected country ID from the HTML input
+        
+              $.ajax({                       // initialize an AJAX request
+                url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+                data: {
+                  'category': categoryId       // add the country id to the GET parameters
+                },
+                success: function (data) {   // `data` is the return of the `load_cities` view function
+                  $("#id_subcategory").html(data);  // replace the contents of the city input with the data that came from the server
+                }
+              });
+        
+            });
+          </script>
+    </div>
+</body>
+
+</html>

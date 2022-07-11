@@ -1,0 +1,176 @@
+{% include 'customer\index.html' %}
+{% load static %}
+{% block body %}
+
+<!-- Page Preloder -->
+<div id="preloder">
+    <div class="loader"></div>
+</div>
+
+<!-- Offcanvas Menu Begin -->
+<div class="offcanvas-menu-overlay"></div>
+<div class="offcanvas-menu-wrapper">
+    <div class="offcanvas__close">+</div>
+    <ul class="offcanvas__widget">
+        <li><span class="icon_search search-switch"></span></li>
+        <li><a href="{% url 'wishlist' %}"><span class="icon_heart_alt"></span>
+            <div class="tip">{{ wishlist_count }}</div>
+        </a></li>
+        <li><a href="{% url 'cart' %}"><span class="icon_bag_alt"></span>
+            <div class="tip">{{ cart_count }}</div>
+        </a></li>
+    </ul>
+    <div class="offcanvas__logo">
+        <a href="{% url 'home' %}"><img style="width: 12rem;" src="{% static 'admin\img\brand\senora.png' %}" alt=""></a>
+    </div>
+    <div id="mobile-menu-wrap"></div>
+    {% if user is not None %}
+        <div class="offcanvas__auth">
+            <a href="{% url 'user_dashboard' %}" style="font-weight: 600;">{{ user.username }}</a>
+            <a href="{% url 'logout' %}" style="font-weight: 600;">Logout</a>
+        </div>
+        {% else %}
+        <div class="offcanvas__auth">
+            <a href="{% url 'login' %}" style="font-weight: 600;">Login</a>
+            <a href="{% url 'register' %}" style="font-weight: 600;">Register</a>
+        </div>
+        {% endif %}
+</div>
+<!-- Offcanvas Menu End -->
+
+<!-- Header Section Begin -->
+<header class="header">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-3 col-lg-2">
+                <div class="header__logo">
+                    <a href="{% url 'home' %}"><img style="width: 12rem;" src="{% static 'admin\img\brand\senora.png' %}" alt=""></a>
+                </div>
+            </div>
+            <div class="col-xl-6 col-lg-7">
+                <nav class="header__menu">
+                    <ul>
+                        <li><a href="{% url 'home' %}">Home</a></li>
+                        <li><a href="{% url 'products' %}">Shop</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="col-lg-3">
+                <div class="header__right">
+                    {% if user.id is not None%}
+                        <div class="header__right__auth">
+                            <a href="{% url 'user_dashboard' %}" style="font-weight: 600;">{{ user.username }}</a>
+                            <a href="{% url 'logout' %}" style="font-weight: 600;">Logout</a>
+                        </div>
+                        {% else %}
+                        <div class="header__right__auth">
+                            <a href="{% url 'login' %}" style="font-weight: 600;">Login</a>
+                            <a href="{% url 'register' %}" style="font-weight: 600;">Register</a>
+                        </div>
+                        {% endif %}
+                    <ul class="header__right__widget">
+                        <li><a href="{% url 'wishlist' %}"><span class="icon_heart_alt"></span>
+                            <div class="tip">{{ wishlist_count }}</div>
+                        </a></li>
+                        <li><a href="{% url 'cart' %}"><span class="icon_bag_alt"></span>
+                            <div class="tip">{{ cart_count }}</div>
+                        </a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="canvas__open">
+            <i class="fa fa-bars"></i>
+        </div>
+    </div>
+</header>
+<!-- Header Section End -->
+
+    <!-- Breadcrumb Begin -->
+    <div class="breadcrumb-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__links">
+                        <a href="{% url 'home' %}"><i class="fa fa-home"></i> Home</a>
+                        <a href="{% url 'products' %}">products</a>
+                        <span>Wishlist</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+{% if not cart_items %}
+    <div class=" d-flex align-items-center justify-content-center ">
+    <div>
+        <h1> omg...!!! </h1><h2> It's so empty here </h2><br>
+        <div class="cart__btn">
+            <a href="{% url 'products' %}">Continue Shopping</a>
+        </div>
+    </div>
+    </div>
+{% else %}
+    <!-- Shop Cart Section Begin -->
+    <section class="shop-cart spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="shop__cart__table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for wishlist_item in wishlist_items %}
+                                <tr>
+                                    <td class="cart__product__item">
+                                        <img src="{{ wishlist_item.product.thumbnail_image_1.url }}" style="width:80px" alt="">
+                                        <div class="cart__product__item__title">
+                                            <a href="{{ wishlist_item.get_url }}"><h6>{{wishlist_item.product.product_name}}</h6></a>
+                                            <div class="rating">
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="cart__price">&nbsp;&nbsp;&nbsp;{{wishlist_item.product.price}}</td>
+                                    <td><a href="{% url 'remove_cart_item' cart_item.product.id cart_item.id %}" onclick="return confirm('Are you sure you want to remove this item.?')" class="cart__close"><span class="icon_close"></span></td></a>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                    <div class="cart__btn">
+                        <a href="{% url 'products' %}">Continue Shopping</a>
+                    </div>
+                </div>
+            </div>
+    </section>
+    {% endif %}
+    <!-- Shop Cart Section End -->
+
+ 
+   
+
+    <!-- Search Begin -->
+    <div class="search-model">
+        <div class="h-100 d-flex align-items-center justify-content-center">
+            <div class="search-close-switch">+</div>
+            <form class="search-model-form">
+                <input type="text" id="search-input" placeholder="Search here.....">
+            </form>
+        </div>
+    </div>
+    <!-- Search End -->
+{% endblock %}
