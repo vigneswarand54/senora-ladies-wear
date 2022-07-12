@@ -5,6 +5,7 @@ from customer.models import Cartitem,Cart
 from django.contrib.auth.decorators import login_required
 from customer.views import _cart_id
 from django.db.models import Q
+from django.core.paginator import EmptyPage,PageNotAnInteger,Paginator
 
 
 
@@ -31,19 +32,28 @@ def products(request,category_slug=None,subcategory_slug=None):
     elif category_slug != None and subcategory_slug == None:
         categories = get_object_or_404(category,slug = category_slug)
         products = product.objects.filter(category=categories,is_available=True)
+        paginator=Paginator(products,6)
+        page= request.GET.get('page')
+        paged_products= paginator.get_page(page)
         products_count = products.count()
         
     elif category_slug != None and subcategory_slug != None:
         categories = get_object_or_404(category,slug = category_slug)
         subcategories = get_object_or_404(subcategory, slug = subcategory_slug)
         products = product.objects.filter(category=categories,subcategory=subcategories,is_available=True)
+        paginator=Paginator(products,6)
+        page= request.GET.get('page')
+        paged_products= paginator.get_page(page)
         products_count = products.count()
     else:
         products = product.objects.all().filter(is_available=True)
+        paginator=Paginator(products,6)
+        page= request.GET.get('page')
+        paged_products= paginator.get_page(page)
         products_count = products.count()
         
     context = {
-        'products': products,
+        'products': paged_products,
         'products_count': products_count,
     }
     return render(request, 'products/shop.html',context)

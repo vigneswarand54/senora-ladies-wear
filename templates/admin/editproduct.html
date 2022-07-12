@@ -32,7 +32,7 @@
                                 <strong>Edit product details</strong>
                             </div>
                             
-                            <form role="form" action="" method="POST" id="filterationForm" data-filters-url="{% url 'ajax_load_subcategories' %}" novalidate>
+                            <form role="form" action="" method="POST" enctype="multipart/form-data" id="filterationForm" data-filters-url="{% url 'ajax_load_subcategories' %}" novalidate>
                                 {% csrf_token %}
                                 {% for form in form %}
                                 <div class="form-group">

@@ -110,7 +110,7 @@ def editproduct(request,id):
     Product=product.objects.get(id=id)
     form=addproductform(instance=Product)
     if request.method == 'POST':
-        form=addproductform(request.POST,instance=Product)
+        form=addproductform(request.POST,request.FILES,instance=Product)
         if form.is_valid():
             form.save()
             return redirect('productmanagement')
@@ -129,9 +129,9 @@ def deleteproduct(request,id):
 def addproduct(request):
     form=addproductform()
     if request.method == 'POST':
-        form=addproductform(request.POST)
+        form=addproductform(request.POST, request.FILES)
         if form.is_valid():
-            item = form.save()
+            form.save()
             return redirect('addvariation')
         else:
             messages.warning(request, 'Enter the requied values')
@@ -165,7 +165,7 @@ def addfilters(request):
 @login_required(login_url = 'adminlogin')
 def addcategory(request):
     if request.method == 'POST':
-        categoryform=addcategoryform(request.POST)
+        categoryform=addcategoryform(request.POST, request.FILES)
         if categoryform.is_valid():
             categoryform.save()
             return redirect('addfilters')

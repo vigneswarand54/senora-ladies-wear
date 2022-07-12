@@ -64,11 +64,8 @@ class addcategoryform(forms.ModelForm):
 class addsubcategoryform(forms.ModelForm):
     
     class Meta:
-        
         model = subcategory
-        
         fields =['subcategory','slug','category',]
-        
         widgets = {
             'subcategory'          :forms.TextInput(attrs={ 'class': 'form-control'}),
             'slug'                 :forms.TextInput(attrs={ 'class': 'form-control'}),

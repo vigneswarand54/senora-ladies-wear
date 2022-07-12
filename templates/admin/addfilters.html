@@ -127,7 +127,7 @@
                                 <strong>Add category</strong>
                             </div>
 
-                            <form role="form" action="{% url 'addcategory' %}" method="POST">
+                            <form role="form" action="{% url 'addcategory' %}" method="POST" enctype="multipart/form-data">
                                 {% csrf_token %}
                                 {% for form in categoryform %}
                                 <div class="form-group">
