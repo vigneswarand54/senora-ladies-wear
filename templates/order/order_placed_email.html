@@ -1,0 +1,13 @@
+{% autoescape off %}
+Hi {{user.first_name}},
+                        
+            Thankyou for shoping with senora, Your order is confirmed. 
+
+                        ordernumber :- {{order.order_number}}
+                        paid amount :- {{order.order_total}}
+
+
+            If this is not done by you , please ignore this message.
+
+
+{% endautoescape %}
