@@ -13,7 +13,7 @@ def send(phone):
 
 def check(phone, code):
     try:
-        result = verify.verification_checks.create(to=str('+')+phone, code=code)
+        result = verify.verification_checks.create(to=str('+91')+phone, code=code)
     except TwilioRestException:
         print('no')
         return False

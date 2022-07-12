@@ -86,9 +86,9 @@ WSGI_APPLICATION = 'senora.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': config('NAME'),
-        'USER': config('USER'),
-        'PASSWORD': config('PASSWORD'),
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
         'HOST': 'localhost',
         'PORT': '',
     }
@@ -175,6 +175,6 @@ EMAIL_HOST_PASSWORD=config('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS =config('EMAIL_USE_TLS')
 EMAIL_BACKEND =config('EMAIL_BACKEND')
 
-TWILIO_VERIFY_SERVICE_SID=config('1TWILIO_VERIFY_SERVICE_SID')
-TWILIO_ACCOUNT_SID=config('1TWILIO_ACCOUNT_SID')
-TWILIO_AUTH_TOKEN=config('1TWILIO_AUTH_TOKEN')
+TWILIO_VERIFY_SERVICE_SID=config('TWILIO_VERIFY_SERVICE_SID')
+TWILIO_ACCOUNT_SID=config('TWILIO_ACCOUNT_SID')
+TWILIO_AUTH_TOKEN=config('TWILIO_AUTH_TOKEN')
