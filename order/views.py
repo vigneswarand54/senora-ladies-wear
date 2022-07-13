@@ -10,7 +10,7 @@ from order.models import OrderProduct
 from .models import Order, Payment
 import datetime
 import razorpay
-from senora.settings import RAZORPAY_API_KEY, RAZORPAY_API_SECRETKEY
+from senora import settings
 
 # Create your views here.
 
@@ -61,7 +61,7 @@ def place_order(request):
             data.save()
             print(data.delivery_address)
             # create razorpay client
-            client = razorpay.Client(auth=(RAZORPAY_API_KEY, RAZORPAY_API_SECRETKEY))
+            client = razorpay.Client(auth=(settings.RAZORPAY_API_KEY, settings.RAZORPAY_API_SECRETKEY))
 
             # generate order
             DATA = {
