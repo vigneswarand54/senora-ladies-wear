@@ -117,29 +117,29 @@ def payment_status(request):
         cart_items = Cartitem.objects.filter(user=user)
         print(cart_items)
         for cart_item in cart_items:
-            pro_data = OrderProduct.objects.create(
-            order = order.order_id,
-            payment = payment.id,
-            user = request.user.id,
-            product = cart_item.product.id,
-            # variation = cart_item.variations.variation_value
-            quantity = cart_item.quantity,
-            product_price = cart_item.product.price,
-            Ordered = True,
-            )
+            pro_data = OrderProduct()
+            pro_data.order = order
+            pro_data.payment = payment
+            pro_data.user = user
+            pro_data.product = cart_item.product
+            pro_data.quantity = cart_item.quantity
+            pro_data.product_price = cart_item.product.price
+            pro_data.Ordered = True 
             pro_data.save()
-            # pr = cart_item.product
-            # Product = product.objects.filter(id=pr.id)
-            # Product.stock -= cart_item.quantity
-            # Product.save()
+            
+            pr = cart_item.product
+            Product = product.objects.get(id=pr.id)
+            Product.stock -= cart_item.quantity
+            Product.save()
+            
         cart_items.delete()
-        print('fwffvw')
-        mail_subject = 'Thank You for Shop with us!'
+        # print('fwffvw')
+        mail_subject = 'Thank You for Shopping with us!'
         message = render_to_string('order/order_placed_email.html',{'user':request.user,'order':order,})
-        # to_email = request.user.email
-        # send_email = EmailMessage(mail_subject,message,to=[to_email])
-        # send_email.send()
-        # print(send_email,'lastlastlastlast;ast')
+        to_email = request.user.email
+        send_email = EmailMessage(mail_subject,message,to=[to_email])
+        send_email.send()
+        print(send_email,'lastlastlastlast;ast')
         return render(request,'order/payment_status.html',{'status':True})
     except:
         return render(request,'order/payment_status.html',{'status':False})

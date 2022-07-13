@@ -6,7 +6,6 @@ from django.conf import settings
 
 urlpatterns = [
     path('',views.home, name='home'),
-    path('home/',views.home, name='home'),
     path('products/',views.products, name='products'),
     path('products/<slug:category_slug>/',views.products, name='products_by_category'),
     path('products/<slug:category_slug>/<slug:subcategory_slug>/',views.products, name='products_by_subcategory'),

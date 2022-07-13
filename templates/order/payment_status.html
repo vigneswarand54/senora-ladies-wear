@@ -3,10 +3,11 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Example of Auto Loading Bootstrap Modal on Page Load</title>
+    <title>senora</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/55b6755b28.js" crossorigin="anonymous"></script>
 
 </head>
 
@@ -24,16 +25,15 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Select payment method</h5>
                         <a {% if status == True %}href="{% url 'home' %}"{% else %} href="{% url 'checkout' %}"{% endif %}><button type="button" class="close">&times;</button></a>
                     </div>
-                    <div class="modal-body " style="height:20rem;">
+                    <div class="modal-body d-flex flex-column align-items-center justify-content-center mt--2" style="height:20rem;">
                         {% if status %}
-                        <i class="fa-solid fa-circle-check" style="size: 4em; color:rgb(15, 255, 179);"></i>
-                        <h3>payment success</h3>
+                        <span class="fa-solid fa-circle-check fa-4x" style=" color:rgb(15, 255, 179);"></span><br>
+                        <h3>PAYMENT SUCCESS</h3>
                         {% else %}
-                        <i class="fa-solid fa-xmark" style="size: 4em; color: crimson;"></i>
-                        <h3>payment failed</h3>
+                        <span class="fa-solid fa-circle-xmark fa-4x" style=" color: crimson;"></span><br>
+                        <h3>PAYMENT FAILED!!</h3>
                         {% endif %}
                     </div>
                 </div>

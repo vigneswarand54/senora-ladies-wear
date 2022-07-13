@@ -13,10 +13,10 @@
     <div class="offcanvas__close">+</div>
     <ul class="offcanvas__widget">
         <li><span class="icon_search search-switch"></span></li>
-        <li><a href="{% url 'wishlist' %}"><span class="icon_heart_alt"></span>
+        <li><a href="{% url 'wishlist' %}"><span class="fa-solid fa-heart"></span>
             <div class="tip">{{ wishlist_count }}</div>
         </a></li>
-        <li><a href="{% url 'cart' %}"><span class="icon_bag_alt"></span>
+        <li><a href="{% url 'cart' %}"><span class="fa-solid fa-cart-shopping"></span>
             <div class="tip">{{ cart_count }}</div>
         </a></li>
     </ul>
@@ -69,10 +69,10 @@
                         </div>
                         {% endif %}
                     <ul class="header__right__widget">
-                        <li><a href="{% url 'wishlist' %}"><span class="icon_heart_alt"></span>
+                        <li><a href="{% url 'wishlist' %}"><span class="fa-solid fa-heart"></span>
                             <div class="tip">{{ wishlist_count }}</div>
                         </a></li>
-                        <li><a href="{% url 'cart' %}"><span class="icon_bag_alt"></span>
+                        <li><a href="{% url 'cart' %}"><span class="fa-solid fa-cart-shopping"></span>
                             <div class="tip">{{ cart_count }}</div>
                         </a></li>
                     </ul>
@@ -178,7 +178,7 @@
                                                   </div>
                                     </td>
                                     <td class="cart__total">&nbsp;&nbsp;&nbsp;{{cart_item.total}}</td>
-                                    <td><a href="{% url 'remove_cart_item' cart_item.product.id cart_item.id %}" onclick="return confirm('Are you sure you want to remove this item.?')" class="cart__close"><span class="icon_close"></span></td></a>
+                                    <td><a href="{% url 'remove_cart_item' cart_item.product.id cart_item.id %}" onclick="return confirm('Are you sure you want to remove this item.?')" class="cart__close"><span class="fa-solid fa-circle-xmark"></span></td></a>
                                 </tr>
                                 {% endfor %}
                             </tbody>
