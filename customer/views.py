@@ -424,6 +424,7 @@ def add_to_wishlist(request,product_id):
             wishlist_item.user        =   current_user
             wishlist_item.save()
             return redirect('wishlist')
+    return redirect('wishlist')
 
 @login_required(login_url='login')      
 def remove_from_wishlist(request,product_id,wishlist_item_id):
