@@ -14,7 +14,7 @@ class registrationform(forms.ModelForm):
     
     class Meta:
         model=accounts
-        fields = ['first_name','last_name','email','phone','password','confirm_password' ]
+        fields = ['first_name','last_name','username','email','phone','password','confirm_password' ]
         
     def clean(self):
         cleaned_data = super(registrationform,self).clean()
@@ -31,6 +31,7 @@ class registrationform(forms.ModelForm):
 
         self.fields['first_name'].widget.attrs['placeholder'] = 'First Name'
         self.fields['last_name'].widget.attrs['placeholder'] = 'Last Name'
+        self.fields['username'].widget.attrs['placeholder'] = 'username'
         self.fields['phone'].widget.attrs['placeholder'] = 'Phone Number'
         self.fields['email'].widget.attrs['placeholder'] = 'Email Address'
         for field in self.fields:

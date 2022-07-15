@@ -48,7 +48,7 @@ class accounts(AbstractBaseUser):
     first_name       = models.CharField(max_length=50)
     last_name        = models.CharField(max_length=50)
     username         = models.CharField(max_length=50, unique=True)
-    email            = models.EmailField(max_length=50, unique=True)
+    email            = models.EmailField(max_length=50)
     phone            = models.CharField(max_length=50)
 
     #required
@@ -60,8 +60,8 @@ class accounts(AbstractBaseUser):
     is_superadmin    = models.BooleanField(default=False)
     
     
-    USERNAME_FIELD  =   'email'
-    REQUIRED_FIELDS =   ['username','first_name','last_name']
+    USERNAME_FIELD  =   'username'
+    REQUIRED_FIELDS =   ['first_name','last_name']
     
     objects = customusermanager()
     

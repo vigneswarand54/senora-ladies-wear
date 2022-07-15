@@ -21,7 +21,7 @@ def register(request):
             phonenumber = form.cleaned_data['phone']
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
-            username = email.split("@")[0]
+            username = form.cleaned_data['username']
             user = accounts.objects.create_user(first_name=first_name, last_name=last_name,
                                                 phone=phonenumber, email=email, username=username, password=password)
             user.phone = phonenumber
