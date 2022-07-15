@@ -143,8 +143,8 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="cart__price">&nbsp;&nbsp;&nbsp;{{wishlist_item.product.price}}</td>
-                                    <td><a href="{% url 'remove_from_wishlist' wishlist_item.product.id wishlist_item.id %}" onclick="return confirm('Are you sure you want to remove this item.?')" class="cart__close"><span class="fa-solid fa-circle-xmark"></span></td></a>
+                                    <td class="cart__price" >&nbsp;&nbsp;&nbsp;₹{{wishlist_item.product.price}}</td>
+                                    <td style="float:right;margin-top: 25px;"><a href="{% url 'remove_from_wishlist' wishlist_item.product.id wishlist_item.id %}" onclick="return confirm('Are you sure you want to remove this item.?')" class="cart__close"><span class="fa-solid fa-circle-xmark"></span></td></a>
                                 </tr>
                                 {% endfor %}
                             </tbody>

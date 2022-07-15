@@ -21,13 +21,8 @@ from django.conf import settings
 urlpatterns = [
     path('djangoadmin/', admin.site.urls),
     path('', include('customer.urls')),
-    path('',include('siteadmin.urls')),
+    path('admin/',include('siteadmin.urls')),
     path('', include('accounts.urls')),
     path('',include('product.urls')),
     path('',include('order.urls')),
-    path('senora/', include('customer.urls')),
-    path('admin/',include('siteadmin.urls')),
-    path('senora/', include('accounts.urls')),
-    path('senora/',include('product.urls')),
-    path('senora/orders/',include('order.urls')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

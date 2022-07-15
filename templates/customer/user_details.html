@@ -195,7 +195,7 @@
 				</td>
 				<td> 
 					<p class="title mb-0">{{order_product.product.product_name}} </p>
-					<var class="price text-muted"> {{order_product.product_price}}</var>
+					<var class="price text-muted">₹ {{order_product.product_price}}/-</var>
 				</td>
 				<td >{% for item in order_product.variation.all %}
                     <h6 style="display:inline; color:grey">{{item.variation_category | capfirst }}&nbsp;:</h6><h6 style="display:inline">&nbsp;{{item.variation_value| capfirst }}&nbsp;&nbsp;</h6>

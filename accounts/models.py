@@ -26,7 +26,7 @@ class customusermanager(BaseUserManager):
     
     
     
-    def create_superuser(self, first_name, last_name, username, email, password,phone):
+    def create_superuser(self, first_name, last_name, username, email,phone, password=None):
        
         user = self.create_user( 
             email = self.normalize_email(email),
@@ -49,7 +49,7 @@ class accounts(AbstractBaseUser):
     last_name        = models.CharField(max_length=50)
     username         = models.CharField(max_length=50, unique=True)
     email            = models.EmailField(max_length=50)
-    phone            = models.CharField(max_length=50)
+    phone            = models.CharField(max_length=50,unique=True)
 
     #required
     date_joined      = models.DateTimeField(auto_now_add=True)
@@ -61,15 +61,15 @@ class accounts(AbstractBaseUser):
     
     
     USERNAME_FIELD  =   'username'
-    REQUIRED_FIELDS =   ['first_name','last_name']
+    REQUIRED_FIELDS =   ['email','first_name','last_name','phone']
     
     objects = customusermanager()
     
     def __str__(self):
         return self.email
-    
-    def has_perm(self,perm,obj=None):
+
+    def has_perm(self, perm, obj=None):
         return self.is_admin
-    
+
     def has_module_perms(self, add_label):
         return True

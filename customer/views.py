@@ -21,7 +21,7 @@ def register(request):
             phonenumber = form.cleaned_data['phone']
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
-            username = form.cleaned_data['username']
+            username = email.split("@")[0]
             user = accounts.objects.create_user(first_name=first_name, last_name=last_name,
                                                 phone=phonenumber, email=email, username=username, password=password)
             user.phone = phonenumber
@@ -371,7 +371,7 @@ def save_address(request):
 def _wishlist_id(request):
     wishlist = request.session.session_key
     if not wishlist:
-        wishlist = request.session.create(request.user)
+        wishlist = request.session.create()
     return wishlist
    
 @login_required(login_url='login')
@@ -410,20 +410,13 @@ def add_to_wishlist(request,product_id):
             Wishlist.save()
             
             
-    product_to_wishlist   = product.objects.get(id=product_id)
-    wishlist_items=wishlistitem.objects.all()
+    product_to_wishlist = product.objects.get(id=product_id)
     
-    for item in wishlist_items:
-        if  product_to_wishlist == item:
-            messages.warning(request,'This item is already in wishlist.')
-            return redirect('wishlist')
-        else:
-            wishlist_item = wishlistitem()
-            wishlist_item.product     =   product_to_wishlist
-            wishlist_item.wishlist    =   wishlist.objects.get(wishlist_id=Wishlist)
-            wishlist_item.user        =   current_user
-            wishlist_item.save()
-            return redirect('wishlist')
+    wishlist_item = wishlistitem()
+    wishlist_item.product     =   product_to_wishlist
+    wishlist_item.wishlist    =   wishlist.objects.get(wishlist_id=Wishlist)
+    wishlist_item.user        =   current_user
+    wishlist_item.save()
     return redirect('wishlist')
 
 @login_required(login_url='login')      

@@ -168,7 +168,7 @@
                                     <td>{{order.order_number}}</td>
                                     <td><button type="button" class=" btn-primary"  data-container="body" data-toggle="popover" data-placement="top" data-content="{{order.delivery_address.firstname}}, {{order.delivery_address.lastname}}, {{order.delivery_address.addressfield_1}}, {{order.delivery_address.addressfield_2}}, {{order.delivery_address.city}}, {{order.delivery_address.state}}, {{order.delivery_address.country}}, {{order.delivery_address.post_code}}, {{order.delivery_address.phonenumber}}, ">Delivery address</button></td>
                                     <td><button type="button" class=" btn-primary"  data-container="body" data-toggle="popover" data-placement="top" data-content="{{order.order_note}}">Order note</button></td>
-                                    <td>{{order.order_total}}</td>
+                                    <td>₹ {{order.order_total}}/-</td>
                                     <td>
                                         <form action="{% url 'orderstatus' order.id %}" method="POST">
                                         {% csrf_token %}
