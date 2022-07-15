@@ -32,6 +32,12 @@ def otp(request):
         form = UserCreationForm()
     return render(request, 'accounts/register_otp.html',{'form':form})
 
+def resendotp(request):
+    phone = request.session['phonenumber']
+    send(phone)
+    return redirect('otp')
+    
+
 def forgotPassword(request):
     if request.method == 'POST':
         email = request.POST['email']
