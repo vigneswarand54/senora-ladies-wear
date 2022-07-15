@@ -14,7 +14,7 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
     <!-- Icons -->
     <link href="{% static 'admin/js/plugins/nucleo/css/nucleo.css' %}" rel="stylesheet" />
-    <link href="{% static 'admin/js/plugins/@fortawesome/fontawesome-free/css/all.min.css' %}" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" rel="stylesheet" />
     <!-- CSS Files -->
     <link href="{% static 'admin/css/argon-dashboard.css' %}" rel="stylesheet" />
 </head>
@@ -67,68 +67,68 @@
                 <!-- Navigation -->
                 <ul class="navbar-nav">
                     <li class="nav-item  active ">
-                        <a class="nav-link  active " href="{% url 'dashboard' %}">
-                            <i class="ni ni-tv-2 text-primary"></i> Dashboard
-                        </a>
+                      <a class="nav-link  active " href="{% url 'dashboard' %}">
+                        <i class="fa-solid fa-tv text-primary"></i> Dashboard
+                      </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'usermanagement' %}">
-                            <i class="ni ni-single-02 text-yellow"></i> User managemet
-                        </a>
+                      <a class="nav-link" href="{% url 'usermanagement' %}">
+                        <i class="fa-solid fa-users text-yellow" ></i> User managemet
+                      </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " href="{% url 'filtermanagement' %}">
-                            <i class=" ni ni-box-1 text-orange"></i> Filter management
-                        </a>
+                      <a class="nav-link " href="{% url 'filtermanagement' %}">
+                          <i class="fa-solid fa-layer-group text-orange"></i> Filter management
+                      </a>
+                  </li>
+                    <li class="nav-item">
+                      <a class="nav-link " href="{% url 'addfilters' %}">
+                          <i class="fa-solid fa-layer-group text-orange"></i><i class="fa-solid fa-plus text-orange"></i> Add filters
+                      </a>
+                  </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'productmanagement' %}">
+                        <i class="fa-solid fa-shirt text-blue"></i>Product management
+                      </a>
+                    </li>
+                  
+                    <li class="nav-item">
+                      <a class="nav-link " href="{% url 'addproduct' %}">
+                        <i class=" fa-solid fa-shirt text-blue"></i><i class="fa-solid fa-plus text-blue"></i> Add product
+                      </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " href="{% url 'addfilters' %}">
-                            <i class=" ni ni-box-1 text-orange"></i> Add filters
-                        </a>
+                      <a class="nav-link" href="{% url 'variationmanagement' %}">
+                        <i class="fa-solid fa-ruler text-black"></i>Variation management
+                      </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'productmanagement' %}">
-                            <i class="ni ni-shop text-blue"></i>Product management
-                        </a>
-                    </li>
-
+                      <a class="nav-link " href="{% url 'addvariation' %}">
+                          <i class=" fa-solid fa-ruler text-black"></i><i class="fa-solid fa-plus text-black"></i> Add variation
+                      </a>
+                  </li>
                     <li class="nav-item">
-                        <a class="nav-link " href="{% url 'addproduct' %}">
-                            <i class=" ni ni-box-2 text-orange"></i> Add product
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'variationmanagement' %}">
-                          <i class="ni ni-scale text-blue"></i>Variation management
-                        </a>
-                      </li>
-                    <li class="nav-item">
-                        <a class="nav-link " href="{% url 'addvariation' %}">
-                            <i class=" ni ni-ungroup text-teal"></i> Add variation
-                        </a>
+                      <a class="nav-link" href="{% url 'ordermanagement' %}">
+                        <i class="fa-solid fa-truck text-green"></i> Order management
+                      </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'ordermanagement' %}">
-                            <i class="ni ni-delivery-fast text-green"></i> Order management
-                        </a>
+                      <a class="nav-link" href="{% url 'adminregister' %}">
+                        <i class="fa-solid fa-user-check text-pink"></i> Create new Admin
+                      </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'adminregister' %}">
-                            <i class="ni ni-circle-08 text-pink"></i> Create new Admin
-                        </a>
+                      <a class="nav-link" href="{% url 'adminlogout' %}">
+                        <i class="fa-solid fa-power-off"></i> Logout
+                      </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'adminlogout' %}">
-                            <i class="ni ni-button-power"></i> Logout
-                        </a>
-                    </li>
-                </ul>
+                  </ul>
             </div>
         </div>
     </nav>
     
     <div class="main-content">
-        
+      {% include 'includes/alerts.html' %}
         <!-- Projects table -->
         <!-- Dark table -->
         

@@ -108,7 +108,7 @@
 
 <!-- ========================= SECTION CONTENT ========================= -->
 <section class="section-conten padding-y bg ">
-
+    {% include 'includes/alerts.html' %}
 <div class="container">
 	<div >
 	<aside class="col-md-3">
@@ -179,9 +179,9 @@
                     {% endif %}
                     {% endfor %}
 					</p>
-                    {% if   order.status == 'New' or order.status == 'Accepted' %}
-                    <a href="{% url 'cancel_order' pk=order.id %}" onclick="return confirm('DO you want to cancel this order')"><button class="btn btn-danger">Cancel order</button></a>
-                    {% endif %}
+                    {% comment %} {% if   order.status == 'New' or order.status == 'Accepted' %}
+                    <a href="{% url 'cancel_order' order.order_number %}" onclick="return confirm('Do you want to cancel this order')"><button class="btn btn-danger">Cancel order</button></a>
+                    {% endif %} {% endcomment %}
 				</div>
 			</div> <!-- row.// -->
 		</div> <!-- card-body .// -->
@@ -195,7 +195,7 @@
 				</td>
 				<td> 
 					<p class="title mb-0">{{order_product.product.product_name}} </p>
-					<var class="price text-muted">USD {{order_product.product_price}}</var>
+					<var class="price text-muted"> {{order_product.product_price}}</var>
 				</td>
 				<td >{% for item in order_product.variation.all %}
                     <h6 style="display:inline; color:grey">{{item.variation_category | capfirst }}&nbsp;:</h6><h6 style="display:inline">&nbsp;{{item.variation_value| capfirst }}&nbsp;&nbsp;</h6>

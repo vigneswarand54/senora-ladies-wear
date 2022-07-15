@@ -32,8 +32,6 @@ def otp(request):
         form = UserCreationForm()
     return render(request, 'accounts/register_otp.html',{'form':form})
 
-
-
 def forgotPassword(request):
     if request.method == 'POST':
         email = request.POST['email']

@@ -15,7 +15,7 @@
     <ul class="offcanvas__widget">
         <li><span class="icon_search search-switch"></span></li>
         <li><a href="{% url 'wishlist' %}"><span class="fa-solid fa-heart"></span>
-            <div class="tip">{{ wishlist_count }}</div>
+                <div class="tip">{{ wishlist_count }}</div>
             </a></li>
         <li><a href="{% url 'cart' %}"><span class="fa-solid fa-cart-shopping"></span>
                 <div class="tip">{{ cart_count }}</div>
@@ -26,16 +26,16 @@
     </div>
     <div id="mobile-menu-wrap"></div>
     {% if user is not None %}
-        <div class="offcanvas__auth">
-            <a href="{% url 'user_dashboard' %}" style="font-weight: 600;">{{ user.username }}</a>
-            <a href="{% url 'logout' %}" style="font-weight: 600;">Logout</a>
-        </div>
-        {% else %}
-        <div class="offcanvas__auth">
-            <a href="{% url 'login' %}" style="font-weight: 600;">Login</a>
-            <a href="{% url 'register' %}" style="font-weight: 600;">Register</a>
-        </div>
-        {% endif %}
+    <div class="offcanvas__auth">
+        <a href="{% url 'user_dashboard' %}" style="font-weight: 600;">{{ user.username }}</a>
+        <a href="{% url 'logout' %}" style="font-weight: 600;">Logout</a>
+    </div>
+    {% else %}
+    <div class="offcanvas__auth">
+        <a href="{% url 'login' %}" style="font-weight: 600;">Login</a>
+        <a href="{% url 'register' %}" style="font-weight: 600;">Register</a>
+    </div>
+    {% endif %}
 </div>
 <!-- Offcanvas Menu End -->
 
@@ -45,7 +45,8 @@
         <div class="row">
             <div class="col-xl-3 col-lg-2">
                 <div class="header__logo">
-                    <a href="{% url 'home' %}"><img style="width: 12rem;" src="{% static 'admin\img\brand\senora.png' %}" alt=""></a>
+                    <a href="{% url 'home' %}"><img style="width: 12rem;"
+                            src="{% static 'admin\img\brand\senora.png' %}" alt=""></a>
                 </div>
             </div>
             <div class="col-xl-6 col-lg-7">
@@ -59,19 +60,19 @@
             <div class="col-lg-3">
                 <div class="header__right">
                     {% if user.id is not None%}
-                        <div class="header__right__auth">
-                            <a href="{% url 'user_dashboard' %}" style="font-weight: 600;">{{ user.username }}</a>
-                            <a href="{% url 'logout' %}" style="font-weight: 600;">Logout</a>
-                        </div>
-                        {% else %}
-                        <div class="header__right__auth">
-                            <a href="{% url 'login' %}" style="font-weight: 600;">Login</a>
-                            <a href="{% url 'register' %}" style="font-weight: 600;">Register</a>
-                        </div>
-                        {% endif %}
+                    <div class="header__right__auth">
+                        <a href="{% url 'user_dashboard' %}" style="font-weight: 600;">{{ user.username }}</a>
+                        <a href="{% url 'logout' %}" style="font-weight: 600;">Logout</a>
+                    </div>
+                    {% else %}
+                    <div class="header__right__auth">
+                        <a href="{% url 'login' %}" style="font-weight: 600;">Login</a>
+                        <a href="{% url 'register' %}" style="font-weight: 600;">Register</a>
+                    </div>
+                    {% endif %}
                     <ul class="header__right__widget">
                         <li><a href="{% url 'wishlist' %}"><span class="fa-solid fa-heart"></span>
-                            <div class="tip">{{ wishlist_count }}</div>
+                                <div class="tip">{{ wishlist_count }}</div>
                             </a></li>
                         <li><a href="{% url 'cart' %}"><span class="fa-solid fa-cart-shopping"></span>
                                 <div class="tip">{{ cart_count }}</div>
@@ -108,6 +109,7 @@
 
 <!-- Product Details Section Begin -->
 <section class="product-details spad">
+    {% include 'includes/alerts.html' %}
     <div class="container">
         <div class="row">
             <div class="col-lg-6">
@@ -145,44 +147,44 @@
                     {% csrf_token %}
                     <div class="product__details__text">
                         <h3>{{ single_product.product_name }}</h3>
-                        <div class="rating">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <span>( 138 reviews )</span>
+                            <div>
+                                <span>
+                                <i class="fa-solid fa-star "{% if single_product.averagereview >= 1 %}style="color:#ffb503"{% endif %}></i>
+                                <i class="fa-solid fa-star "{% if single_product.averagereview >= 2 %}style="color:#ffb503"{% endif %}></i>
+                                <i class="fa-solid fa-star "{% if single_product.averagereview >= 3 %}style="color:#ffb503"{% endif %}></i>
+                                <i class="fa-solid fa-star "{% if single_product.averagereview >= 4 %}style="color:#ffb503"{% endif %}></i>
+                                <i class="fa-solid fa-star "{% if single_product.averagereview >= 5 %}style="color:#ffb503"{% endif %}></i>
+                                </span>
+                            <span>( {{review_count}} )</span>
                         </div>
                         <div class="product__details__price">₹ {{ single_product.price }}/-<span></span></div>
-                        <p>Nemo enim ipsam voluptatem quia aspernatur aut odit aut loret fugit, sed quia consequuntur
-                            magni lores eos qui ratione voluptatem sequi nesciunt.</p>
                         <div class="product__details__button">
 
-                            {% if single_product.stock <= 0 %} <a href="" class="cart-btn"></span> Out of stock </a>
+                            {% if single_product.stock <= 0 %} 
+                            <a href="" class="cart-btn"></span> Out of stock </a>
                                 {% else %}
-                                <button type="submit" class="cart-btn"><span class="fa-solid fa-cart-shopping"></span> Add to
-                                    cart</button>
-                                {% endif %}
+                                <button type="submit" class="cart-btn"><span class="fa-solid fa-cart-shopping"></span>
+                                    Add to cart</button>
+                            {% endif %}
                                 <ul>
-                                     <!-- {% for wishlist_item in wishlist_items %}{% endfor %}
-                                    {% if wishlist_item == product %}
+                                     {% for wishlist_item in wishlist_items %}{% endfor %}
+                                    {% if wishlist_item == single_product %}
                                     <li><a style="color:red;" class="fa-solid fa-heart"></a></li>
                                     {% else %}
-                                    <li><a href="{% url 'add_to_wishlist' single_product.id %}"><span class="fa-solid fa-heart"></span></a></li>
-                                    {% endif %}  -->
-                                    
+                                    <li><a style="color:red;" class="fa-solid fa-heart" href="{% url 'add_to_wishlist' single_product.id %}"></a></li>
+                                    {% endif %} 
                                 </ul>
                         </div>
                         <div class="product__details__widget">
                             <ul>
                                 <li>
                                     <span>Available color:</span>
-                                    <div class="color__checkbox" >
+                                    <div class="color__checkbox">
                                         {% for variation in single_product.variation_set.colors %}
-                                        <label style="background-color: black;border-radius: 50%;" >
+                                        <label style="background-color: black;border-radius: 50%;">
                                             <input type="radio" name="color" id="{{ variation.variation_value }}"
                                                 value="{{ variation.variation_value }}" {% if forloop.first %}checked{% endif %}>
-                                            <a  style="color:{{variation.variation_value}};" ><i class="fa fa-circle fa-2x " aria-hidden="true"></i></a>
+                                            <a style="color:{{variation.variation_value}};"><i class="fa fa-circle fa-2x " aria-hidden="true"></i></a>
                                         </label>
                                         {% endfor %}
                                     </div>
@@ -215,7 +217,7 @@
                             <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab">Description</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">Reviews ( 2 )</a>
+                            <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">Reviews ( {{review_count}} )</a>
                         </li>
                     </ul>
                     <div class="tab-content">
@@ -223,18 +225,79 @@
                             <h2>Description</h2>
                             <p>{{ single_product.description }}</p>
                         </div>
-                         <div class="tab-pane" id="tabs-2" role="tabpanel">
-                            <h6>Reviews ( 2 )</h6>
-                            <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut loret fugit, sed
-                                quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt loret.
-                                Neque porro lorem quisquam est, qui dolorem ipsum quia dolor si. Nemo enim ipsam
-                                voluptatem quia voluptas sit aspernatur aut odit aut loret fugit, sed quia ipsu
-                                consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Nulla
-                                consequat massa quis enim.</p>
-                            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget
-                                dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes,
-                                nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium
-                                quis, sem.</p>
+                        <div class="tab-pane" id="tabs-2" role="tabpanel">
+                            <br>
+                            <form action="{% url 'submit_review' single_product.id %}" method="post">
+                                {% csrf_token %}
+                                <h4>Write your review</h4>
+                                <div class="d-flex flex-column">
+                                    <!-- rating stars -->
+                                    <div class="rate">
+                                        <span>
+                                        <input type="radio" name="rating" id="rating1" value="1"><label for="rating1"
+                                            title="1"></label>
+                                        <input type="radio" name="rating" id="rating2" value="2"><label for="rating2"
+                                            title="2"></label>
+                                        <input type="radio" name="rating" id="rating3" value="3"><label for="rating3"
+                                            title="3"></label>
+                                        <input type="radio" name="rating" id="rating4" value="4"><label for="rating4"
+                                            title="4"></label>
+                                        <input type="radio" name="rating" id="rating5" value="5"><label for="rating5"
+                                            title="5"></label>
+                                        </span>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6">
+                                        <div>
+                                            <input class="form-control" type="text" Name='subject' placeholder="Title">
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="col-lg-6 col-md-6 col-sm-6">
+                                        <div>
+                                            <p>Review</p>
+                                            <textarea class="form-control" name='review' id="review" cols="30" rows="10"
+                                                placeholder="write your review..."></textarea>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div>
+                                        {% if user.is_authenticated %}
+                                            {% if orderproduct %}
+                                            <button style="margin-left: 21em;" type="submit" class="site-btn">Add
+                                                review</button>
+                                            {% else %}
+                                            <h4>You must purchase this item to post a review</h4>
+
+                                            {% endif %}
+                                        {% else %}
+                                        <h4>You must be logged in to post a review<span><a
+                                                    href="{% url 'login' %}"></a></span></h4>
+                                        
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                            </form>
+
+                            <br><br><br>
+                            <h4>Reviews ( {{review_count}} )</h4><hr>
+
+                            {% for review in reviews %}
+                            <h3>{{review.user.username}}</h3><br>
+                            <div>
+                                <span>
+                                <i class="fa-solid fa-star "{% if review.rating >= 1 %}style="color:#ffb503"{% endif %}></i>
+                                <i class="fa-solid fa-star "{% if review.rating >= 2 %}style="color:#ffb503"{% endif %}></i>
+                                <i class="fa-solid fa-star "{% if review.rating >= 3 %}style="color:#ffb503"{% endif %}></i>
+                                <i class="fa-solid fa-star "{% if review.rating >= 4 %}style="color:#ffb503"{% endif %}></i>
+                                <i class="fa-solid fa-star "{% if review.rating >= 5 %}style="color:#ffb503"{% endif %}></i>
+                                </span>
+                            </div><br>
+                            <h4>{{review.subject}}</h4><br>
+                            <p>{{review.review}}</p><br>
+                            <br>
+                            <h6>{{review.updated_at}}</h6>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
@@ -252,26 +315,29 @@
                 {% if products != single_product %}
                 <div class="product__item">
                     <div class="product__item__pic set-bg" data-setbg="{{products.thumbnail_image_1.url}}">
-                        
+
                         <ul class="product__hover">
                             <li><a href="{{products.thumbnail_image_1.url}}" class="image-popup"><span
                                         class="fa-solid fa-up-right-and-down-left-from-center"></span></a></li>
-                            {% comment %} {% for wishlist_item in wishlist_items %}{% endfor %}
+                            {% for wishlist_item in wishlist_items %}{% endfor %}
                             {% if wishlist_item == product %}
                             <li><a style="color:red;" class="fa-solid fa-heart"></a></li>
                             {% else %}
-                            <li><a href="{% url 'add_to_wishlist' product.id %}"><span class="fa-solid fa-heart"></span></a></li>
-                            {% endif %} {% endcomment %}
+                            <li><a href="{% url 'add_to_wishlist' product.id %}"><span
+                                        class="fa-solid fa-heart"></span></a></li>
+                            {% endif %} 
                         </ul>
                     </div>
                     <div class="product__item__text">
                         <h6><a href="#">{{products.product_name}}</a></h6>
-                        <div class="rating">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
+                        <div >
+                            <span>
+                                <i class="fa-solid fa-star "{% if product.averagereview >= 1 %}style="color:#ffb503"{% endif %}></i>
+                                <i class="fa-solid fa-star "{% if product.averagereview >= 2 %}style="color:#ffb503"{% endif %}></i>
+                                <i class="fa-solid fa-star "{% if product.averagereview >= 3 %}style="color:#ffb503"{% endif %}></i>
+                                <i class="fa-solid fa-star "{% if product.averagereview >= 4 %}style="color:#ffb503"{% endif %}></i>
+                                <i class="fa-solid fa-star "{% if product.averagereview >= 5 %}style="color:#ffb503"{% endif %}></i>
+                                </span>
                         </div>
                         <div class="product__price">{{products.price}}</div>
                     </div>
@@ -281,8 +347,6 @@
                 {% endfor %}
             </div>
         </div>
-    </div>
-    </div>
 </section>
 <!-- Product Details Section End -->
 

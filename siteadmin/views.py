@@ -7,6 +7,7 @@ from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from accounts.models import accounts
+from product.views import products
 from siteadmin.form import addproductform,addvariationform,addcategoryform,addsubcategoryform
 from accounts.forms import registrationform
 
@@ -42,6 +43,7 @@ def admin_register(request):
     return render(request,'admin/admin_register.html',context)
 
 def admin_login(request):
+
     if request.method == 'POST':
         email = request.POST['email']
         password = request.POST['password']
@@ -67,7 +69,20 @@ def admin_logout(request):
 
 @login_required(login_url = 'adminlogin')
 def dashboard(request):
-    return render(request,'admin/dashboard.html')
+    if 'user' in request.session:
+        redirect('home')
+    
+    users_count=accounts.objects.filter(is_superadmin=False).count()
+    admins_count=accounts.objects.filter(is_superadmin=True).count()
+    orders_count=Order.objects.all().count()
+    products_count=product.objects.all().count()
+    context={
+        'users_count':users_count,
+        'admins_count':admins_count,
+        'orders_count':orders_count,
+        'products_count':products_count,
+    }
+    return render(request,'admin/dashboard.html',context)
 
 @login_required(login_url = 'adminlogin')
 def usermanagement(request):

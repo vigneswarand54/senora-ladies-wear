@@ -19,19 +19,19 @@ def counter(request):
         except Cart.DoesNotExist:
             cart_count = 0
             
-        # try:
+        try:
                 
-        #     Wishlist = wishlist.objects.filter(wishlist_id =_wishlist_id(request))
-        #     if request.user.is_authenticated:
-        #         wishlist_items = wishlistitem.objects.all().filter(user=request.user)
-        #     else:
-        #         wishlist_items = wishlistitem.objects.all().filter(wishlist=Wishlist[:1])
-        #     for wishlist_item in wishlist_items:
-        #         wishlist_count += 1
-        # except wishlist.DoesNotExist:
-        #     wishlist_count = 0
+            Wishlist = wishlist.objects.filter(wishlist_id =_wishlist_id(request))
+            if request.user.is_authenticated:
+                wishlist_items = wishlistitem.objects.all().filter(user=request.user)
+            else:
+                wishlist_items = wishlistitem.objects.all().filter(wishlist=Wishlist[:1])
+            for wishlist_item in wishlist_items:
+                wishlist_count += 1
+        except wishlist.DoesNotExist:
+            wishlist_count = 0
     return dict(cart_count=cart_count,
-                # wishlist_count=wishlist_count,
-                # wishlist_items=wishlist_items
+                wishlist_count=wishlist_count,
+                wishlist_items=wishlist_items
                 )
             

@@ -21,6 +21,7 @@
 
 <body class="bg-default">
   <div class="main-content">
+    {% include 'includes/alerts.html' %}
     <!-- Page content -->
     <div class="container mt-8 pb-5">
       <div class="row justify-content-center">
@@ -36,7 +37,7 @@
                 <div class="form-group mb-3">
                   <div class="input-group input-group-alternative">
                     <div class="input-group-prepend">
-                      <span class="input-group-text"><i class="ni ni-email-83"></i></span>
+                      <span class="input-group-text"></span>
                     </div>
                     <input class="form-control" placeholder="Email" type="email" name="email">
                   </div>
@@ -44,7 +45,7 @@
                 <div class="form-group">
                   <div class="input-group input-group-alternative">
                     <div class="input-group-prepend">
-                      <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
+                      <span class="input-group-text"></span>
                     </div>
                     <input class="form-control" placeholder="Password" type="password" name="password">
                   </div>
@@ -61,7 +62,7 @@
               {% comment %} <a href="#" class="text-light"><small>Forgot password?</small></a> {% endcomment %}
             </div>
             <div class="col-6 text-right">
-              <a href="#" class="text-light"><small>Create new account</small></a>
+              <a href="{% url 'login' %}" class="text-light"><small>Customer login</small></a>
             </div>
           </div>
         </div>

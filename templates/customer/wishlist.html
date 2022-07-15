@@ -101,7 +101,7 @@
         </div>
     </div>
     <!-- Breadcrumb End -->
-{% if not cart_items %}
+{% if not wishlist_items %}
     <div class=" d-flex align-items-center justify-content-center ">
     <div>
         <h1> omg...!!! </h1><h2> It's so empty here </h2><br>
@@ -113,6 +113,7 @@
 {% else %}
     <!-- Shop Cart Section Begin -->
     <section class="shop-cart spad">
+        {% include 'includes/alerts.html' %}
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
@@ -131,17 +132,19 @@
                                         <img src="{{ wishlist_item.product.thumbnail_image_1.url }}" style="width:80px" alt="">
                                         <div class="cart__product__item__title">
                                             <a href="{{ wishlist_item.get_url }}"><h6>{{wishlist_item.product.product_name}}</h6></a>
-                                            <div class="rating">
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
+                                            <div >
+                                                <span>
+                                                    <i class="fa-solid fa-star "{% if wishlist_item.product.averagereview >= 1 %}style="color:#ffb503"{% endif %}></i>
+                                                    <i class="fa-solid fa-star "{% if wishlist_item.product.averagereview >= 2 %}style="color:#ffb503"{% endif %}></i>
+                                                    <i class="fa-solid fa-star "{% if wishlist_item.product.averagereview >= 3 %}style="color:#ffb503"{% endif %}></i>
+                                                    <i class="fa-solid fa-star "{% if wishlist_item.product.averagereview >= 4 %}style="color:#ffb503"{% endif %}></i>
+                                                    <i class="fa-solid fa-star "{% if wishlist_item.product.averagereview >= 5 %}style="color:#ffb503"{% endif %}></i>
+                                                    </span>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="cart__price">&nbsp;&nbsp;&nbsp;{{wishlist_item.product.price}}</td>
-                                    <td><a href="{% url 'remove_cart_item' cart_item.product.id cart_item.id %}" onclick="return confirm('Are you sure you want to remove this item.?')" class="cart__close"><span class="fa-solid fa-circle-xmark"></span></td></a>
+                                    <td><a href="{% url 'remove_from_wishlist' wishlist_item.product.id wishlist_item.id %}" onclick="return confirm('Are you sure you want to remove this item.?')" class="cart__close"><span class="fa-solid fa-circle-xmark"></span></td></a>
                                 </tr>
                                 {% endfor %}
                             </tbody>

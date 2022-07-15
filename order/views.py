@@ -16,6 +16,7 @@ from senora import settings
 
 @login_required(login_url='login')
 def place_order(request):
+    
     current_user = request.user
     payment_status = None
     grand_total = 0
@@ -134,12 +135,17 @@ def payment_status(request):
             
         cart_items.delete()
         # print('fwffvw')
-        mail_subject = 'Thank You for Shopping with us!'
-        message = render_to_string('order/order_placed_email.html',{'user':request.user,'order':order,})
-        to_email = request.user.email
-        send_email = EmailMessage(mail_subject,message,to=[to_email])
-        send_email.send()
-        print(send_email,'lastlastlastlast;ast')
+        # mail_subject = 'Thank You for Shopping with us!'
+        # print('hello')
+        # message = render_to_string('order/order_placed_email.html',{'user':request.user,'order':order,})
+        # print('hello')
+        # to_email = request.user.email
+        # print('hello')
+        # send_email = EmailMessage(mail_subject,message,to=[to_email])
+        # print('hello')
+        # send_email.send()
+        # print('hello')
+        messages.success(request, 'your order is placed')
         return render(request,'order/payment_status.html',{'status':True})
     except:
         return render(request,'order/payment_status.html',{'status':False})

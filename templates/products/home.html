@@ -88,13 +88,14 @@
     </div>
 </header>
 <!-- Header Section End -->
+{% include 'includes/alerts.html' %}
 
 <!-- Categories Section Begin -->
 <section class="categories">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-lg-6 p-0">
-                <div class="categories__item categories__large__item set-bg" data-setbg="{% static 'customer/img/categories/category-1.jpg' %}">
+            <div class="col-lg-6 col-md-6 col-sm-10 col-10">
+                <div class="categories__item categories__large__item set-bg img-fluid" style="width:auto;" data-setbg="{% static 'customer/img/categories/category-1.jpg' %}">
                     <div class="categories__text">
                         <h1>Women’s fashion</h1>
                         <p>Sitamet, consectetur adipiscing elit, sed do eiusmod tempor incidid-unt labore
@@ -127,6 +128,7 @@
 
 <!-- Product Section Begin -->
 <section class="product spad">
+    
     <div class="container">
         <div class="row">
             <div class="col-lg-4 col-md-4">
@@ -144,22 +146,24 @@
                             <li><a href="{{ product.thumbnail_image_1.url }}" class="image-popup"><span
                                         class="fa-solid fa-up-right-and-down-left-from-center"></span></a></li>
                             
-                            {% comment %} {% for wishlist_item in wishlist_items %}{% endfor %}
+                           {% for wishlist_item in wishlist_items %}{% endfor %}
                             {% if wishlist_item == product %}
                             <li><a style="color:red;" class="fa-solid fa-heart"></a></li>
                             {% else %}
                             <li><a href="{% url 'add_to_wishlist' product.id %}"><span class="fa-solid fa-heart"></span></a></li>
-                            {% endif %} {% endcomment %}
+                            {% endif %}
                         </ul>
                     </div>
                     <div class="product__item__text">
                         <h6><a href="{{ product.get_url }}">{{ product.product_name }}</a></h6>
-                        <div class="rating">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
+                        <div >
+                            <span>
+                                <i class="fa-solid fa-star "{% if product.averagereview >= 1 %}style="color:#ffb503"{% endif %}></i>
+                                <i class="fa-solid fa-star "{% if product.averagereview >= 2 %}style="color:#ffb503"{% endif %}></i>
+                                <i class="fa-solid fa-star "{% if product.averagereview >= 3 %}style="color:#ffb503"{% endif %}></i>
+                                <i class="fa-solid fa-star "{% if product.averagereview >= 4 %}style="color:#ffb503"{% endif %}></i>
+                                <i class="fa-solid fa-star "{% if product.averagereview >= 5 %}style="color:#ffb503"{% endif %}></i>
+                                </span>
                         </div>
                         <div class="product__price">₹ {{ product.price }}/-</div>
                     </div>

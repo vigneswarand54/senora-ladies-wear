@@ -32,7 +32,7 @@ def register(request):
             messages.success(request, 'Registration successful.')
             return redirect('otp')
         else:
-            messages.success(request, 'passwords does not match')
+            messages.warning(request, 'passwords does not match')
             return redirect('register')
     else:
         form = registrationform()
@@ -46,7 +46,7 @@ def login(request):
     if request.method == 'POST':
         email = request.POST['email']
         password = request.POST['password']
-        user = auth.authenticate(email=email, password=password)
+        user = auth.authenticate(email=email, password=password,is_superadmin=False)
         if user is not None:
             try:
                 print('entering inside try block') 
@@ -83,7 +83,7 @@ def login(request):
                             cart_item = Cartitem.objects.filter(cart=cart)
                             for item in Cart_item:
                                 item.user = user
-                                item.save()
+                                item.save() 
             except:
                 pass
             auth.login(request, user)
@@ -369,7 +369,9 @@ def save_address(request):
 
 @login_required(login_url='login')
 def _wishlist_id(request):
-    wishlist = request.user.id
+    wishlist = request.session.session_key
+    if not wishlist:
+        wishlist = request.session.create(request.user)
     return wishlist
    
 @login_required(login_url='login')
@@ -377,9 +379,8 @@ def Wishlist(request):
     try:
           Wishlist = wishlist.objects.get(wishlist_id=_wishlist_id(request))
     except wishlist.DoesNotExist:
-            Wishlist = wishlist.objects.create(
-                wishlist_id=_wishlist_id(request)
-            )  
+            Wishlist = wishlist()
+            Wishlist.wishlist_id=_wishlist_id(request) 
             Wishlist.save()
     try:
         if request.user.is_authenticated:
@@ -400,24 +401,29 @@ def Wishlist(request):
 @login_required(login_url='login')
 def add_to_wishlist(request,product_id):
     current_user=request.user
+    item = None
     try:
           Wishlist = wishlist.objects.get(wishlist_id=_wishlist_id(request))
     except wishlist.DoesNotExist:
-            Wishlist = wishlist.objects.create(
-                wishlist_id=_wishlist_id(request)
-            )  
+            Wishlist = wishlist()
+            Wishlist.wishlist_id=_wishlist_id(request)
             Wishlist.save()
+            
+            
     product_to_wishlist   = product.objects.get(id=product_id)
-    if  product_to_wishlist in wishlistitem.objects.all():
-        messages.warning(request,'This item is already in wishlist.')
-    else:
-        wishlist_item = wishlistitem.objects.create(
-                product     =   product_to_wishlist,
-                wishlist    =   wishlist.objects.get(wishlist_id=Wishlist),
-                user        =   current_user
-                )
-        wishlist_item.save()
-    return redirect('wishlist')
+    wishlist_items=wishlistitem.objects.all()
+    
+    for item in wishlist_items:
+        if  product_to_wishlist == item:
+            messages.warning(request,'This item is already in wishlist.')
+            return redirect('wishlist')
+        else:
+            wishlist_item = wishlistitem()
+            wishlist_item.product     =   product_to_wishlist
+            wishlist_item.wishlist    =   wishlist.objects.get(wishlist_id=Wishlist)
+            wishlist_item.user        =   current_user
+            wishlist_item.save()
+            return redirect('wishlist')
 
 @login_required(login_url='login')      
 def remove_from_wishlist(request,product_id,wishlist_item_id):
@@ -453,10 +459,14 @@ def user_dashboard(request):
     }
     return render(request,'customer/user_details.html',context)
 
-def cancel_order(request,pk):
-    order = Order.objects.get(id=pk)
-    if order.status is not 'Completed':
-        order.Status = 'Cancelled'
-        order.save()
-        messages.success(request,'Product Cancellation processed.')
-    return redirect('user_dashboard')
+# def cancel_order(request,pk):
+#     print(pk)
+#     order = Order.objects.get(order_number=pk)
+#     print(order)
+#     if order.status != 'Completed':
+#         print(order.status)
+#         order.Status = 'Cancelled'
+#         print(order.status)
+#         order.save()
+#         messages.success(request,'Product Cancellation processed.')
+#     return redirect('user_dashboard')

@@ -31,7 +31,7 @@ class Cartitem(models.Model):
         return self.product
     
 class wishlist(models.Model):
-    wishlist_id    = models.CharField(max_length=250,blank=True)
+    wishlist_id    = models.CharField(max_length=250,blank=True,unique=True)
     date_added     = models.DateField(auto_now_add=True)
     
     def __str__(self):
@@ -40,14 +40,11 @@ class wishlist(models.Model):
 class wishlistitem(models.Model):
     user       = models.ForeignKey(accounts, on_delete=models.CASCADE, null=True)
     product    = models.ForeignKey(product, on_delete=models.CASCADE)
-    wishlist   = models.ForeignKey(Cart, on_delete=models.CASCADE, null=True)
+    wishlist   = models.ForeignKey(wishlist, on_delete=models.CASCADE, null=True)
 
     
     def get_url(self):
         return reverse('product_details',args=[self.product.category.slug,self.product.subcategory.slug,self.product.slug])        
-    
-    def __unicode__(self):
-        return self.product
     
     
 class Delivery_address(models.Model):
@@ -67,3 +64,6 @@ class Delivery_address(models.Model):
     
     def __str__(self):
         return self.user.username
+    
+    
+   
