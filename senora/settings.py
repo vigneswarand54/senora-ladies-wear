@@ -172,14 +172,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'accounts.accounts'
 
 AUTHENTICATION_BACKENDS = (
-        'django.contrib.auth.backends.ModelBackend',
+    'django.contrib.auth.backends.ModelBackend',
 )
-SESSION_EXPIRE_AT_BROWSER_CLOSE=True
-SESSION_SAVE_EVERY_REQUEST=True
-SESSION_COOKIE_AGE=86400
-SESSION_COOKIE_DOMAIN=None
-SESSION_COOKIE_NAME='DSESSIONID'
-SESSION_COOKIE_SECURE=False
 
 # razor pay integration
 

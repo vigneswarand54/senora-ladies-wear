@@ -48,57 +48,63 @@ def login(request):
         password = request.POST['password']
         user = auth.authenticate(email=email, password=password,is_superadmin=False)
         if user is not None:
-            try:
-                print('entering inside try block') 
-                cart = Cart.objects.get(cart_id=_cart_id(request)) 
-                is_cart_item_exists = Cartitem.objects.filter(cart=cart).exists
-                print(is_cart_item_exists)
-                if is_cart_item_exists:
-                    Cart_item = Cartitem.objects.filter(cart=cart)
-                    # getting the product variations by cart id
-                    for item in Cart_item:
-                        product_variation = []
-                        variation = item.variations.all()
-                        product_variation.append(list(variation))
-                    
-                    # gets the cart item from the user to access their product variations
-                    cart_item = Cartitem.objects.filter( user=user)
-                    existing_var_list= []
-                    item_id = []
-                    for item in cart_item:
-                        existing_variation = item.variations.all()
-                        existing_var_list.append(list(existing_variation))
-                        item_id.append(item.id)
-                    
-                    for pv in product_variation:
-                        if pv in existing_var_list:
-                            # increase cart_item quantity
-                            index = existing_var_list.index(pv)
-                            id = item_id[index]
-                            item = Cartitem.objects.get(id=id)
-                            item.quantity += 1
-                            item.user = user
-                            item.save()
-                        else:
-                            cart_item = Cartitem.objects.filter(cart=cart)
-                            for item in Cart_item:
+            if not user.is_superadmin:
+                try:
+                    print('entering inside try block')
+                    cart = Cart.objects.get(cart_id=_cart_id(request)) 
+                    is_cart_item_exists = Cartitem.objects.filter(cart=cart).exists
+                    print(is_cart_item_exists)
+                    if is_cart_item_exists:
+                        Cart_item = Cartitem.objects.filter(cart=cart)
+                        # getting the product variations by cart id
+                        for item in Cart_item:
+                            product_variation = []
+                            variation = item.variations.all()
+                            product_variation.append(list(variation))
+                        
+                        # gets the cart item from the user to access their product variations
+                        cart_item = Cartitem.objects.filter( user=user)
+                        existing_var_list= []
+                        item_id = []
+                        for item in cart_item:
+                            existing_variation = item.variations.all()
+                            existing_var_list.append(list(existing_variation))
+                            item_id.append(item.id)
+                        
+                        for pv in product_variation:
+                            if pv in existing_var_list:
+                                # increase cart_item quantity
+                                index = existing_var_list.index(pv)
+                                id = item_id[index]
+                                item = Cartitem.objects.get(id=id)
+                                item.quantity += 1
                                 item.user = user
-                                item.save() 
-            except:
-                pass
-            auth.login(request, user)
-            messages.success(request, "You are logged in")
-            url = request.META.get('HTTP_REFERER')
-            try:
-                query = requests.utils.urlparse(url).query
-                print('query =',query)
-                params = dict(x.split('=') for x in query.split('&'))
-                if 'next' in params:
-                    nextPage = params['next']
-                    return redirect(nextPage)
-            except:
-                return redirect('home')
-            
+                                item.save()
+                            else:
+                                cart_item = Cartitem.objects.filter(cart=cart)
+                                for item in Cart_item:
+                                    item.user = user
+                                    item.save()
+                except:
+                    pass
+                auth.login(request, user)
+                request.session['user']=auth.login(request,user)
+                messages.success(request, "You are logged in")
+                url = request.META.get('HTTP_REFERER')
+                try:
+                    query = requests.utils.urlparse(url).query
+                    print('query =',query)
+                    params = dict(x.split('=') for x in query.split('&'))
+                    if 'next' in params:
+                        nextPage = params['next']
+                        return redirect(nextPage)
+                except:
+                    return redirect('home')
+                
+            else:
+                messages.error(request, 'You are an admin')
+                return redirect('dashboard')
+                
         else:
 
             messages.error(request, 'invalid login credentials')
@@ -109,9 +115,10 @@ def login(request):
 
 @login_required(login_url='login')
 def logout(request):
-    auth.logout(request)
-    messages.success(request, 'You are logged out.')
-    return redirect('home')
+    if 'user' in request.session:
+        auth.logout(request)
+        messages.success(request, 'You are logged out.')
+        return redirect('home')
 
 
 def _cart_id(request):
@@ -298,160 +305,167 @@ def cart(request, total=0, quantity=0, cart_items=None):
 
 @login_required(login_url='login')
 def checkout(request, total=0, quantity=0, cart_items=None):
-    try:
-        tax = 0
-        grand_total = 0
-        if request.user.is_authenticated:
-            cart_items = Cartitem.objects.filter(user=request.user , is_active=True).order_by('id')
-            address = Delivery_address.objects.filter(user=request.user)
-        else:
-            cart = Cart.objects.get(cart_id=_cart_id(request))
-            cart_items = Cartitem.objects.filter(cart=cart, is_active=True).order_by('id')
-        for cart_item in cart_items:
-            total += (cart_item.product.price * cart_item.quantity)
-            quantity += cart_item.quantity
-        tax = (3 * total)/100
-        grand_total = total + tax
-    except Cartitem.DoesNotExist:
-        pass
-    
-    
-    context = {
-        'total'     : total,
-        'grandtotal': grand_total,
-        'tax'       : tax,
-        'quantity'  : quantity,
-        'cart_items': cart_items,
-        'address'   : address
-    }
-    return render(request, 'customer/checkout.html',context)
+    if 'user' in request.session:
+        try:
+            tax = 0
+            grand_total = 0
+            if request.user.is_authenticated:
+                cart_items = Cartitem.objects.filter(user=request.user , is_active=True).order_by('id')
+                address = Delivery_address.objects.filter(user=request.user)
+            else:
+                cart = Cart.objects.get(cart_id=_cart_id(request))
+                cart_items = Cartitem.objects.filter(cart=cart, is_active=True).order_by('id')
+            for cart_item in cart_items:
+                total += (cart_item.product.price * cart_item.quantity)
+                quantity += cart_item.quantity
+            tax = (3 * total)/100
+            grand_total = total + tax
+        except Cartitem.DoesNotExist:
+            pass
+        
+        
+        context = {
+            'total'     : total,
+            'grandtotal': grand_total,
+            'tax'       : tax,
+            'quantity'  : quantity,
+            'cart_items': cart_items,
+            'address'   : address
+        }
+        return render(request, 'customer/checkout.html',context)
 
 @login_required(login_url='login')
 def save_address(request):
-    if request.method == 'POST':
-        form = addressform(request.POST)
-        User = request.user
-        if form.is_valid:
-            if User.is_authenticated:
-                user             = User
-                firstname        = request.POST['firstname']
-                lastname         = request.POST['lastname']
-                addressfield_1   = request.POST['addressfield_1']
-                addressfield_2   = request.POST['addressfield_2']
-                city             = request.POST['city']
-                state            = request.POST['state']
-                country          = request.POST['country']
-                post_code        = request.POST['post_code']
-                phonenumber      = request.POST['phonenumber']
-                email            = request.POST['email']
-                
-                address = Delivery_address.objects.create(
-                    user=user,
-                    firstname=firstname,
-                    lastname=lastname,
-                    addressfield_1=addressfield_1,
-                    addressfield_2=addressfield_2,
-                    city=city,
-                    state=state,
-                    country=country,
-                    post_code=post_code,
-                    phonenumber=phonenumber,
-                    email=email,
-                    )
-                address.save()
-                messages.success(request, "Address is saved")
-                return redirect(checkout)
-            else:
-                return redirect(login)
-    else:
-        messages.info(request, "please enter the reqired information")
-        return redirect(checkout)
+    if 'user' in request.session:
+        if request.method == 'POST':
+            form = addressform(request.POST)
+            User = request.user
+            if form.is_valid:
+                if User.is_authenticated:
+                    user             = User
+                    firstname        = request.POST['firstname']
+                    lastname         = request.POST['lastname']
+                    addressfield_1   = request.POST['addressfield_1']
+                    addressfield_2   = request.POST['addressfield_2']
+                    city             = request.POST['city']
+                    state            = request.POST['state']
+                    country          = request.POST['country']
+                    post_code        = request.POST['post_code']
+                    phonenumber      = request.POST['phonenumber']
+                    email            = request.POST['email']
+                    
+                    address = Delivery_address.objects.create(
+                        user=user,
+                        firstname=firstname,
+                        lastname=lastname,
+                        addressfield_1=addressfield_1,
+                        addressfield_2=addressfield_2,
+                        city=city,
+                        state=state,
+                        country=country,
+                        post_code=post_code,
+                        phonenumber=phonenumber,
+                        email=email,
+                        )
+                    address.save()
+                    messages.success(request, "Address is saved")
+                    return redirect(checkout)
+                else:
+                    return redirect(login)
+        else:
+            messages.info(request, "please enter the reqired information")
+            return redirect(checkout)
 
 @login_required(login_url='login')
 def _wishlist_id(request):
-    wishlist = request.session.session_key
-    if not wishlist:
-        wishlist = request.session.create()
-    return wishlist
+    if 'user' in request.session:
+        wishlist = request.session.session_key
+        if not wishlist:
+            wishlist = request.session.create()
+        return wishlist
    
 @login_required(login_url='login')
 def Wishlist(request):
-    try:
-          Wishlist = wishlist.objects.get(wishlist_id=_wishlist_id(request))
-    except wishlist.DoesNotExist:
-            Wishlist = wishlist()
-            Wishlist.wishlist_id=_wishlist_id(request) 
-            Wishlist.save()
-    try:
-        if request.user.is_authenticated:
-            wishlist_items = wishlistitem.objects.all().filter(user=request.user).order_by('id')
-        else:
+    if 'user' in request.session:
+        try:
             Wishlist = wishlist.objects.get(wishlist_id=_wishlist_id(request))
-            wishlist_items = wishlistitem.objects.filter(wishlist=Wishlist).order_by('id')
-        
-    except ObjectDoesNotExist:
-        pass
-          
-    context = {
-        
-        'wishlist_items': wishlist_items,
-    }
-    return render(request,'customer/wishlist.html',context)
+        except wishlist.DoesNotExist:
+                Wishlist = wishlist()
+                Wishlist.wishlist_id=_wishlist_id(request) 
+                Wishlist.save()
+        try:
+            if request.user.is_authenticated:
+                wishlist_items = wishlistitem.objects.all().filter(user=request.user).order_by('id')
+            else:
+                Wishlist = wishlist.objects.get(wishlist_id=_wishlist_id(request))
+                wishlist_items = wishlistitem.objects.filter(wishlist=Wishlist).order_by('id')
+            
+        except ObjectDoesNotExist:
+            pass
+            
+        context = {
+            
+            'wishlist_items': wishlist_items,
+        }
+        return render(request,'customer/wishlist.html',context)
 
 @login_required(login_url='login')
 def add_to_wishlist(request,product_id):
-    current_user=request.user
-    item = None
-    try:
-          Wishlist = wishlist.objects.get(wishlist_id=_wishlist_id(request))
-    except wishlist.DoesNotExist:
-            Wishlist = wishlist()
-            Wishlist.wishlist_id=_wishlist_id(request)
-            Wishlist.save()
-            
-            
-    product_to_wishlist = product.objects.get(id=product_id)
-    
-    wishlist_item = wishlistitem()
-    wishlist_item.product     =   product_to_wishlist
-    wishlist_item.wishlist    =   wishlist.objects.get(wishlist_id=Wishlist)
-    wishlist_item.user        =   current_user
-    wishlist_item.save()
-    return redirect('wishlist')
+    if 'user' in request.session:
+        current_user=request.user
+        item = None
+        try:
+            Wishlist = wishlist.objects.get(wishlist_id=_wishlist_id(request))
+        except wishlist.DoesNotExist:
+                Wishlist = wishlist()
+                Wishlist.wishlist_id=_wishlist_id(request)
+                Wishlist.save()
+                
+                
+        product_to_wishlist = product.objects.get(id=product_id)
+        
+        wishlist_item = wishlistitem()
+        wishlist_item.product     =   product_to_wishlist
+        wishlist_item.wishlist    =   wishlist.objects.get(wishlist_id=Wishlist)
+        wishlist_item.user        =   current_user
+        wishlist_item.save()
+        return redirect('wishlist')
 
 @login_required(login_url='login')      
 def remove_from_wishlist(request,product_id,wishlist_item_id):
-    item = get_object_or_404(product,id = product_id)
-    if request.user.is_authenticated:
-        wishlist_item=wishlistitem.objects.get(product=item,user=request.user,id=wishlist_item_id)
-    else:
-        Wishlist = wishlist.objects.get(wishlist_id=_wishlist_id(request))
-        wishlist_item=wishlistitem.objects.get(product=item,wishlist=Wishlist,id=wishlist_item_id)
-    wishlist_item.delete()
-    return redirect('wishlist')
+    if 'user' in request.session:
+        item = get_object_or_404(product,id = product_id)
+        if request.user.is_authenticated:
+            wishlist_item=wishlistitem.objects.get(product=item,user=request.user,id=wishlist_item_id)
+        else:
+            Wishlist = wishlist.objects.get(wishlist_id=_wishlist_id(request))
+            wishlist_item=wishlistitem.objects.get(product=item,wishlist=Wishlist,id=wishlist_item_id)
+        wishlist_item.delete()
+        return redirect('wishlist')
         
 @login_required(login_url='login')
 def user_dashboard(request):
-    order_product = OrderProduct.objects.filter(user=request.user)
-    order = Order.objects.filter(user = request.user)
-    payment = Payment.objects.filter(user = request.user)
-    user = accounts.objects.get(id=request.user.id)
-    form=updateuserform(instance=user)
-    if not request.user.is_superadmin:
-        
-        if request.method == 'POST':
-            form=updateuserform(request.POST,instance=user)
-            if form.is_valid():
-                form.save()
-                return redirect('user_dashboard')
+    if 'user' in request.session:
+        order_product = OrderProduct.objects.filter(user=request.user)
+        order = Order.objects.filter(user = request.user)
+        payment = Payment.objects.filter(user = request.user)
+        user = accounts.objects.get(id=request.user.id)
+        form=updateuserform(instance=user)
+        if not request.user.is_superadmin:
+            
+            if request.method == 'POST':
+                form=updateuserform(request.POST,instance=user)
+                if form.is_valid():
+                    form.save()
+                    return redirect('user_dashboard')
 
-    context = {
-        'order':order,
-        'order_product': order_product,
-        'payment':payment,
-        'form':form,
-    }
-    return render(request,'customer/user_details.html',context)
+        context = {
+            'order':order,
+            'order_product': order_product,
+            'payment':payment,
+            'form':form,
+        }
+        return render(request,'customer/user_details.html',context)
 
 # def cancel_order(request,pk):
 #     print(pk)

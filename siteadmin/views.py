@@ -2,7 +2,7 @@ from django.shortcuts import redirect, render
 from order.models import Order
 from product.models import product,Variation, subcategory,category
 from django.contrib import messages
-from django.contrib.auth import authenticate,logout,login
+from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from accounts.models import accounts
@@ -44,23 +44,28 @@ def admin_login(request):
     if request.method == 'POST':
         email = request.POST['email']
         password = request.POST['password']
-        user = authenticate(email = email , password = password, is_superadmin=True)
-        print(user)
+        user = auth.authenticate(email = email , password = password,is_superadmin=True)
         if user is not None:
-            request.session['admin'] = email
-            login(request,user)
-            messages.success(request, "You are logged in")
-            return redirect('dashboard')
+            if user.is_superadmin:
+                auth.login(request,user)
+                request.session['admin']=auth.login(request,user)
+                messages.success(request, "You are logged in")
+                return redirect('dashboard')
+            else:
+                messages.error(request, 'you are not an admin')
+                return redirect('login')
         else:
             messages.error(request, 'invalid login credentials')
             return redirect('adminlogin')
     return render(request, 'admin/admin_login.html')
 
+
 @login_required(login_url = 'adminlogin')
 def admin_logout(request):
     if 'admin' in request.session:
         request.session.flush
-        logout(request)
+        auth.logout(request)
+        request.session['admin']=auth.logout(request)
         messages.success(request, 'You are logged out.')
         return redirect('adminlogin')
     else:
