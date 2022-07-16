@@ -277,14 +277,12 @@
 
                             {% for review in reviews %}
                             <h3>{{review.user.username}}</h3><br>
-                            <div>
-                                <span>
+                            <div style="display:inline" >
                                 <i class="fa-solid fa-star "{% if review.rating >= 1 %}style="color:#ffb503"{% endif %}></i>
                                 <i class="fa-solid fa-star "{% if review.rating >= 2 %}style="color:#ffb503"{% endif %}></i>
                                 <i class="fa-solid fa-star "{% if review.rating >= 3 %}style="color:#ffb503"{% endif %}></i>
                                 <i class="fa-solid fa-star "{% if review.rating >= 4 %}style="color:#ffb503"{% endif %}></i>
                                 <i class="fa-solid fa-star "{% if review.rating >= 5 %}style="color:#ffb503"{% endif %}></i>
-                                </span>
                             </div><br>
                             <h4>{{review.subject}}</h4><br>
                             <p>{{review.review}}</p><br>

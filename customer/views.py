@@ -119,6 +119,8 @@ def logout(request):
         auth.logout(request)
         messages.success(request, 'You are logged out.')
         return redirect('home')
+    return redirect('dashboard')
+
 
 
 def _cart_id(request):
@@ -333,6 +335,7 @@ def checkout(request, total=0, quantity=0, cart_items=None):
             'address'   : address
         }
         return render(request, 'customer/checkout.html',context)
+    return redirect('dashboard')
 
 @login_required(login_url='login')
 def save_address(request):
@@ -375,6 +378,8 @@ def save_address(request):
         else:
             messages.info(request, "please enter the reqired information")
             return redirect(checkout)
+    return redirect('dashboard')
+
 
 @login_required(login_url='login')
 def _wishlist_id(request):
@@ -383,6 +388,8 @@ def _wishlist_id(request):
         if not wishlist:
             wishlist = request.session.create()
         return wishlist
+    return redirect('dashboard')
+
    
 @login_required(login_url='login')
 def Wishlist(request):
@@ -408,6 +415,8 @@ def Wishlist(request):
             'wishlist_items': wishlist_items,
         }
         return render(request,'customer/wishlist.html',context)
+    return redirect('dashboard')
+
 
 @login_required(login_url='login')
 def add_to_wishlist(request,product_id):
@@ -430,6 +439,8 @@ def add_to_wishlist(request,product_id):
         wishlist_item.user        =   current_user
         wishlist_item.save()
         return redirect('wishlist')
+    return redirect('dashboard')
+
 
 @login_required(login_url='login')      
 def remove_from_wishlist(request,product_id,wishlist_item_id):
@@ -442,6 +453,8 @@ def remove_from_wishlist(request,product_id,wishlist_item_id):
             wishlist_item=wishlistitem.objects.get(product=item,wishlist=Wishlist,id=wishlist_item_id)
         wishlist_item.delete()
         return redirect('wishlist')
+    return redirect('dashboard')
+
         
 @login_required(login_url='login')
 def user_dashboard(request):
@@ -466,6 +479,8 @@ def user_dashboard(request):
             'form':form,
         }
         return render(request,'customer/user_details.html',context)
+    return redirect('dashboard')
+
 
 # def cancel_order(request,pk):
 #     print(pk)

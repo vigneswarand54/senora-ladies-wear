@@ -139,8 +139,7 @@
         </div>
         <div class="row property__gallery">
             {% for product in products %}
-            {{loop.index}}
-            {% if loop.index <= 3 %}
+            {% if  forloop.counter <= 3 %}
             <div class="col-lg-3 col-md-4 col-sm-6 mix women">
                 <div class="product__item">
                     <div class="product__item__pic set-bg" data-setbg="{{ product.thumbnail_image_1.url }}">
