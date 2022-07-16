@@ -100,7 +100,7 @@ class reviewrating(models.Model):
     user            = models.ForeignKey(accounts, on_delete=models.CASCADE)
     subject         = models.CharField(max_length=100,blank=True)
     review          = models.TextField(max_length=500,blank=True)
-    rating          = models.FloatField(blank=True)
+    rating          = models.FloatField(blank=True,null=True)
     ip              = models.CharField(max_length=20,blank=True)
     status          = models.BooleanField(default=True)
     created_at      = models.DateTimeField(auto_now_add=True)
