@@ -230,12 +230,14 @@
                                 {% csrf_token %}
                                 <h4>Write your review</h4>
                                     <!-- rating stars -->
-                                    <div class="rate">
-                                        <input type="radio" name="rating" id="rating5" value="5" required /><label for="rating5" title="5"></label>
-                                        <input type="radio" name="rating" id="rating4" value="4" required /><label for="rating4" title="4"></label>
-                                        <input type="radio" name="rating" id="rating3" value="3" required /><label for="rating3" title="3"></label>
-                                        <input type="radio" name="rating" id="rating2" value="2" required /><label for="rating2" title="2"></label>
-                                        <input type="radio" name="rating" id="rating1" value="1" required /><label for="rating1" title="1"></label>
+                                    <div class="rate"  style="display:inline">
+                                        <!-- <span>
+                                        <input type="radio" name="rating" id="rating5" value="5"  /><label for="rating5" title="5"></label>
+                                        <input type="radio" name="rating" id="rating4" value="4"  /><label for="rating4" title="4"></label>
+                                        <input type="radio" name="rating" id="rating3" value="3"  /><label for="rating3" title="3"></label>
+                                        <input type="radio" name="rating" id="rating2" value="2"  /><label for="rating2" title="2"></label>
+                                        <input type="radio" name="rating" id="rating1" value="1"  /><label for="rating1" title="1"></label>
+                                    </span> -->
                                     </div>
                                 <div class="d-flex flex-column">
                                     <div class="col-lg-6 col-md-6 col-sm-6">
@@ -277,12 +279,14 @@
 
                             {% for review in reviews %}
                             <h3>{{review.user.username}}</h3><br>
-                            <div style="display:inline" >
+                            <div>
+                                <span>
                                 <i class="fa-solid fa-star "{% if review.rating >= 1 %}style="color:#ffb503"{% endif %}></i>
                                 <i class="fa-solid fa-star "{% if review.rating >= 2 %}style="color:#ffb503"{% endif %}></i>
                                 <i class="fa-solid fa-star "{% if review.rating >= 3 %}style="color:#ffb503"{% endif %}></i>
                                 <i class="fa-solid fa-star "{% if review.rating >= 4 %}style="color:#ffb503"{% endif %}></i>
                                 <i class="fa-solid fa-star "{% if review.rating >= 5 %}style="color:#ffb503"{% endif %}></i>
+                                </span>
                             </div><br>
                             <h4>{{review.subject}}</h4><br>
                             <p>{{review.review}}</p><br>
@@ -300,10 +304,10 @@
                     <h5>RELATED PRODUCTS</h5>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-4 col-sm-6">
-                {% for products in productlinks %}
+            {% for products in productlinks %}
                 {% if products.category == single_product.category %}
                 {% if products != single_product %}
+            <div class="col-lg-3 col-md-4 col-sm-6">
                 <div class="product__item">
                     <div class="product__item__pic set-bg" data-setbg="{{products.thumbnail_image_1.url}}">
 
@@ -333,10 +337,10 @@
                         <div class="product__price">₹ {{products.price}}/-</div>
                     </div>
                 </div>
-                {% endif %}
-                {% endif %}
-                {% endfor %}
             </div>
+            {% endif %}
+            {% endif %}
+            {% endfor %}
         </div>
 </section>
 <!-- Product Details Section End -->
