@@ -48,7 +48,7 @@ def admin_login(request):
         if user is not None:
             if user.is_superadmin:
                 auth.login(request,user)
-                request.session['admin']=user.phone
+                request.session['admin']=email
                 messages.success(request, "You are logged in")
                 return redirect('dashboard')
             else:
@@ -64,8 +64,8 @@ def admin_login(request):
 def admin_logout(request):
     if 'admin' in request.session:
         request.session.flush
+        request.session['logout'] = auth.logout
         auth.logout(request)
-        request.session['admin']=auth.logout(request)
         messages.success(request, 'You are logged out.')
         return redirect('adminlogin')
     else:

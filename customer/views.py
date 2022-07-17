@@ -88,7 +88,7 @@ def login(request):
                 except:
                     pass
                 auth.login(request, user)
-                request.session['user']=user.phone
+                request.session['user']=email
                 messages.success(request, "You are logged in")
                 url = request.META.get('HTTP_REFERER')
                 try:
@@ -116,6 +116,8 @@ def login(request):
 @login_required(login_url='login')
 def logout(request):
     if 'user' in request.session:
+        request.session.flush()
+        request.session['logout'] = auth.logout
         auth.logout(request)
         messages.success(request, 'You are logged out.')
         return redirect('home')
