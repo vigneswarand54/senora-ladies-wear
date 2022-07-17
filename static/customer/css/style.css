@@ -3151,22 +3151,20 @@ ol {
 	height: 450px
 }
 
-/* review */
 .rate > input{
-	display: none;
+    display: none;
 }
+
 .rate{
-	display: inline-block;
-	border: 0;
+    display: inline-block;
+    border: 0 ;
 }
-
 .rate > label{
-	float: right;
-	padding: 5px;
+    float:right;
 
 }
-/* showing the stars */
 
+/* Start showing the stars */
 .rate > label:before{
     display: inline-block;
     font-size: 1.1rem;
@@ -3177,14 +3175,25 @@ ol {
     cursor:pointer;
 }
 
-input:checked ~ label:hover ~ label{
-	color: #ffb503;
-}
-input:checked + label:hover, input:checked ~ label:hover ,input:checked ~ label:hover ~ label,
-label:hover ~ input:checked ~ label{
 
-	color: #cc9000;
+
+
+/* Click and Hover */
+input:checked ~ label,label:hover ~ label{
+    color:#ffb503;
+    
 }
+
+/* Hover Highlight */
+input:checked + label:hover, input:checked ~ label:hover,input:checked ~ label:hover ~ label,
+label:hover ~ input:checked ~ label{
+    color: #8a691d;
+}
+
+.rating-star i{
+ color :#ffb503 !important;
+}
+
 /*--------------------------------- Responsive Media Quaries -----------------------------*/
 
 @media only screen and (min-width: 1600px) and (max-width: 1900px) {
