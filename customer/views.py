@@ -88,7 +88,7 @@ def login(request):
                 except:
                     pass
                 auth.login(request, user)
-                request.session['user']=auth.login(request,user)
+                request.session['user']=user.phone
                 messages.success(request, "You are logged in")
                 url = request.META.get('HTTP_REFERER')
                 try:

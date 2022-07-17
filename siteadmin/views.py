@@ -48,7 +48,7 @@ def admin_login(request):
         if user is not None:
             if user.is_superadmin:
                 auth.login(request,user)
-                request.session['admin']=auth.login(request,user)
+                request.session['admin']=user.phone
                 messages.success(request, "You are logged in")
                 return redirect('dashboard')
             else:
