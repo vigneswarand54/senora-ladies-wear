@@ -3152,7 +3152,7 @@ ol {
 }
 
 .rate > input{
-    display: inline-block;
+    display: none;
 }
 
 .rate{
