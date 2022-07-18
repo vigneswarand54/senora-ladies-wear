@@ -43,7 +43,7 @@ def register(request):
 
 
 def login(request):
-    if user is not None:
+    if 'user' in request.session:
         return redirect('home')
     if request.method == 'POST':
         email = request.POST['email']
