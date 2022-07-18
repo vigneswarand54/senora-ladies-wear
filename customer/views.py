@@ -43,6 +43,8 @@ def register(request):
 
 
 def login(request):
+    if user is not None:
+        return redirect('home')
     if request.method == 'POST':
         email = request.POST['email']
         password = request.POST['password']

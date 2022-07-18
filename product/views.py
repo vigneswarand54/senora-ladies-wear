@@ -84,7 +84,7 @@ def product_details(request,category_slug,subcategory_slug,product_slug):
     else:
          orderproduct = None
          
-    reviews = reviewrating.objects.filter(user = request.user , product_id = single_product.id ,status = True)
+    reviews = reviewrating.objects.filter(user__id=request.user.id , product_id = single_product.id ,status = True)
     review_count = reviews.count()
     context = {
         'single_product': single_product,
