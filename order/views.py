@@ -108,12 +108,9 @@ def payment_status(request):
             payment.payment_id = payment_id
             payment.paid       = True
             payment.save()
-            print(payment,'..........................................')
-            print(order_number)
             order = Order.objects.get(user=request.user,is_ordered=False,order_number=order_number)
             order.is_ordered = True
             order.status = 'Accepted'
-            print(order.status)
             order.save()
             user = request.user
             cart_items = Cartitem.objects.filter(user=user)
@@ -135,17 +132,11 @@ def payment_status(request):
                 Product.save()
                 
             cart_items.delete()
-            # print('fwffvw')
-            # mail_subject = 'Thank You for Shopping with us!'
-            # print('hello')
-            # message = render_to_string('order/order_placed_email.html',{'user':request.user,'order':order,})
-            # print('hello')
-            # to_email = request.user.email
-            # print('hello')
-            # send_email = EmailMessage(mail_subject,message,to=[to_email])
-            # print('hello')
-            # send_email.send()
-            # print('hello')
+            mail_subject = 'Thank You for Shopping with us!'
+            message = render_to_string('order/order_placed_email.html',{'user':request.user,'order':order,})
+            to_email = request.user.email
+            send_email = EmailMessage(mail_subject,message,to=[to_email])
+            send_email.send()
             messages.success(request, 'your order is placed')
             return render(request,'order/payment_status.html',{'status':True})
         except:
